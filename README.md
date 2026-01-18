@@ -31,8 +31,26 @@ Nota: Si quieres que esto sea permanente, Tailscale recomienda crear un servicio
 Fedora usa firewalld de forma estricta. Si después de lo anterior tus dispositivos no pueden navegar, es probable que el firewall esté bloqueando el tráfico. Prueba a permitir el enmascaramiento:
 Bash
 
-sudo firewall-cmd --permanent --add-masquerade
+sudo firewall-cmd --zone=public --add-masquerade --permanent
 sudo firewall-cmd --reload
+
+Permitir el tráfico de Tailscale en el Firewall
+
+Por defecto, Fedora es muy estricto. Necesitamos decirle que confíe en la interfaz de red de Tailscale. Copia y pega esto:
+
+# 1. Añadimos la interfaz de Tailscale a una zona de confianza
+sudo firewall-cmd --permanent --zone=public --add-interface=tailscale0
+
+# 2. Permitimos que el tráfico pase de la zona de Tailscale a Internet
+sudo firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -i tailscale0 -j ACCEPT
+sudo firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -o tailscale0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# 3. Recargamos todo
+sudo firewall-cmd --reload
+
+
+
+
 
 ¿Qué sigue ahora? Una vez que el comando no te dé errores, recuerda que debes ir al Admin Console de Tailscale (en la web), buscar tu máquina Fedora y, en el menú de "Edit route settings", marcar la casilla para aprobar el Exit Node.
 
