@@ -26,6 +26,9 @@ sudo ethtool -K wlp0s26u1u5 rx-udp-gro-forwarding on
 
 Nota: Si quieres que esto sea permanente, Tailscale recomienda crear un servicio de systemd o una regla de udev, pero prueba primero el comando de arriba para ver si el aviso desaparece.
 
+
+Vuelve a probar: sudo tailscale up --advertise-exit-node
+
 4. ¡Paso importante en Fedora! (Firewall)
 
 Fedora usa firewalld de forma estricta. 
