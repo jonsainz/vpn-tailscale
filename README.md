@@ -28,27 +28,9 @@ Nota: Si quieres que esto sea permanente, Tailscale recomienda crear un servicio
 
 4. ¡Paso importante en Fedora! (Firewall)
 
-Fedora usa firewalld de forma estricta. Si después de lo anterior tus dispositivos no pueden navegar, es probable que el firewall esté bloqueando el tráfico. Prueba a permitir el enmascaramiento:
-Bash
+Fedora usa firewalld de forma estricta. 
 
-sudo firewall-cmd --zone=public --add-masquerade --permanent
-sudo firewall-cmd --reload
-
-Permitir el tráfico de Tailscale en el Firewall
-
-Por defecto, Fedora es muy estricto. Necesitamos decirle que confíe en la interfaz de red de Tailscale. Copia y pega esto:
-
-# 1. Añadimos la interfaz de Tailscale a una zona de confianza
-sudo firewall-cmd --permanent --zone=public --add-interface=tailscale0
-
-# 2. Permitimos que el tráfico pase de la zona de Tailscale a Internet
-sudo firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -i tailscale0 -j ACCEPT
-sudo firewall-cmd --permanent --direct --add-rule ipv4 filter FORWARD 0 -o tailscale0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-
-# 3. Recargamos todo
-sudo firewall-cmd --reload
-
-
+HE ECHO UN SCRIPT DE CONFIGURACION DEL FIREWALL PARA FEDORA
 
 
 
